@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easyse.easyse_simple.mapper.userservice.UserMapper">
+
+    <resultMap id="BaseResultMap" type="com.easyse.easyse_simple.pojo.DO.task.User">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="headline" column="headline" jdbcType="VARCHAR"/>
+            <result property="classId" column="class_id" jdbcType="BIGINT"/>
+            <result property="groupId" column="group_id" jdbcType="BIGINT"/>
+            <result property="username" column="username" jdbcType="VARCHAR"/>
+            <result property="password" column="password" jdbcType="VARCHAR"/>
+            <result property="sex" column="sex" jdbcType="CHAR"/>
+            <result property="email" column="email" jdbcType="VARCHAR"/>
+            <result property="phonenumber" column="phonenumber" jdbcType="CHAR"/>
+            <result property="isActived" column="is_actived" jdbcType="TINYINT"/>
+            <result property="activationCode" column="activation_code" jdbcType="VARCHAR"/>
+            <result property="headerUrl" column="header_url" jdbcType="VARCHAR"/>
+            <result property="loginIp" column="login_ip" jdbcType="VARCHAR"/>
+            <result property="loginUpdate" column="login_update" jdbcType="TIMESTAMP"/>
+            <result property="followeeCount" column="followee_count" jdbcType="INTEGER"/>
+            <result property="followerCount" column="follower_count" jdbcType="INTEGER"/>
+            <result property="isDeleted" column="is_deleted" jdbcType="TINYINT"/>
+            <result property="gmtCreate" column="gmt_create" jdbcType="TIMESTAMP"/>
+            <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
+            <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
+            <result property="updateBy" column="update_by" jdbcType="VARCHAR"/>
+            <result property="remark" column="remark" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,headline,class_id,
+        group_id,username,password,
+        sex,email,phonenumber,
+        is_actived,activation_code,header_url,
+        login_ip,login_update,followee_count,
+        follower_count,is_deleted,gmt_create,
+        create_by,gmt_modified,update_by,
+        remark
+    </sql>
+
+    <update id="updateStatus">
+        update person_user set is_actived = #{isActived} where id = #{userId};
+    </update>
+
+    <select id="getByPhonenumberUser" resultType="com.easyse.easyse_simple.pojo.DO.task.User">
+        select * from person_user
+        where phonenumber = #{phonenumber}
+    </select>
+</mapper>

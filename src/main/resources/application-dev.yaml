@@ -1,0 +1,82 @@
+server:
+  port: 8080
+  servlet:
+    context-path:
+spring:
+  redis:
+    host: ${spring.address.redis}
+    port: ${spring.ports.redis}
+  datasource:
+    url: jdbc:mysql://${spring.address.mysql}:${spring.ports.mysql}/easyse?useSSL=false&characterEncoding=UTF-8
+    username: ${spring.mysql.username}
+    password: ${spring.mysql.password}
+    driver-class-name: com.mysql.jdbc.Driver
+  mail:
+    host: smtp.qq.com
+    port: 465
+    username: ${spring.mail.username}
+    password: ${spring.mail.password}
+    protocol: smtps
+    properties:
+      spring:
+        mail:
+          smtp:
+            ssl:
+              enable: true
+  kafka: # kafka
+    bootstrap-servers: ${spring.kafka.bootstrap-servers}
+    consumer:
+      group-id: ${spring.kafka.consumer.group-id}
+      enable-auto-commit: true
+      auto-commit-interval: 3000
+  data:
+    elasticsearch:
+      cluster-name: ${spring.data.elasticsearch.cluster-name}
+      cluster-nodes: ${spring.data.elasticsearch.cluster-nodes}
+    #      cluster-name: my-application
+    #      cluster-nodes: 47.92.165.44:9300
+    #  elasticsearch:
+    #    rest:
+    #      uris: ${spring.data.elasticsearch.cluster-nodes}
+    neo4j:
+      uri: ${spring.data.neo4j.uri}
+      username: ${spring.data.neo4j.username}
+      password: ${spring.data.neo4j.password}
+
+management:
+  health:
+    elasticsearch:
+      enabled: false
+
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 10000MB
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+
+
+easyse:
+  path:
+    domain: ${easyse.path.domain}
+
+# Caffeine
+caffeine:
+  techqas:
+    max-size: 15
+    expire-seconds: 180
+
+aliyun:
+  endPoint: oss-cn-chengdu.aliyuncs.com
+  urlPrefix: easyse-file.oss-cn-chengdu.aliyuncs.com #  Bucket
+  accessKeyId: LTAI5tKNX5PLDxL1Z8x7Da4y   # accessKey Id
+  accessKeySecret: 7cGVonlthF9mCN6ntfNs4PDuFxchYv   # accessKey Secret
+  bucketName: easyse-file   # Bucket
+  fileHost: files
+

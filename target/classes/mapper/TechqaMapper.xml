@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easyse.easyse_simple.mapper.techqaservice.TechqaMapper">
+
+    <resultMap id="BaseResultMap" type="com.easyse.easyse_simple.pojo.DO.techqa.Techqa">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="userId" column="user_id" jdbcType="BIGINT"/>
+            <result property="title" column="title" jdbcType="VARCHAR"/>
+            <result property="content" column="content" jdbcType="VARCHAR"/>
+            <result property="type" column="type" jdbcType="TINYINT"/>
+            <result property="status" column="status" jdbcType="TINYINT"/>
+            <result property="commentAmount" column="comment_amount" jdbcType="INTEGER"/>
+            <result property="likeAmount" column="like_amount" jdbcType="INTEGER"/>
+            <result property="score" column="score" jdbcType="DECIMAL"/>
+            <result property="isDeleted" column="is_deleted" jdbcType="TINYINT"/>
+            <result property="gmtCreate" column="gmt_create" jdbcType="TIMESTAMP"/>
+            <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
+            <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
+            <result property="modifiedBy" column="modified_by" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+    <sql id = "selectFields">
+        id, user_id, title, content, type, status, comment_amount, score, gmt_create, create_by, gmt_modified, modified_by
+    </sql>
+
+    <sql id="Base_Column_List">
+        id,user_id,title,
+        content,type,status,
+        comment_amount,like_amount,score,
+        is_deleted,gmt_create,create_by,
+        gmt_modified,modified_by
+    </sql>
+
+    <update id="updateStatus">
+        update share_techqa
+        set status = #{status}
+        where id = #{id}
+    </update>
+
+    <update id="updateType">
+        update share_techqa
+        set type = #{type}
+        where id = #{id}
+    </update>
+
+    <!--查询讨论贴的个数-->
+    <select id = "selectTechqaRows" resultType="int">
+        select count(id)
+        from share_techqa
+        where status != 2
+        <if test = "userId != 0">
+            and user_id = #{userId}
+        </if>
+    </select>
+
+
+    <!--分页查询讨论贴信息-->
+    <!--不显示拉黑的帖子, 按照是否置顶和创建时间排序-->
+    <select id = "selectTechqas" resultType="com.easyse.easyse_simple.pojo.DO.techqa.Techqa">
+        select <include refid="selectFields"></include>
+        from share_techqa
+        where status != 2
+        <if test = "userId!=0">
+            and user_id = #{userId}
+        </if>
+        <if test = "orderMode == 0">
+            order by type desc, gmt_create desc
+        </if>
+        <if test = "orderMode == 1">
+            order by type desc, score desc, gmt_create desc
+        </if>
+        limit #{offset}, #{limit}
+    </select>
+
+    <update id="updateCommentCount">
+        update share_techqa set comment_amount = #{commentCount}
+        where id = #{id};
+    </update>
+
+    <update id="updateScore">
+        update share_techqa set score = #{score}
+        where id = #{id};
+    </update>
+</mapper>

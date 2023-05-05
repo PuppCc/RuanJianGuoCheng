@@ -1,0 +1,6 @@
+log-thread-pool:
+  corePoolSize: 1
+  maxPoolSize: 10
+  keepAliveSeconds: 60
+  queueCapacity: 100
+  threadNamePrefix: "easyse-logThread-"

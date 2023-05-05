@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easyse.easyse_simple.mapper.techqaservice.TechqaTopicMapper">
+
+    <resultMap id="BaseResultMap" type="com.easyse.easyse_simple.pojo.DO.techqa.TechqaTopic">
+            <id property="techqaId" column="techqa_id" jdbcType="BIGINT"/>
+            <id property="topicId" column="topic_id" jdbcType="BIGINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        techqa_id,topic_id
+    </sql>
+
+    <select id="getTopicIds" resultType="Long">
+        select topic_id from share_techqa_topic where techqa_id = #{techqaId}
+    </select>
+</mapper>

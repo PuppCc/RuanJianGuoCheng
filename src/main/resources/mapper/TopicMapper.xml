@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easyse.easyse_simple.mapper.techqaservice.TopicMapper">
+
+    <resultMap id="BaseResultMap" type="com.easyse.easyse_simple.pojo.DO.techqa.Topic">
+            <id property="topicId" column="topic_id" jdbcType="BIGINT"/>
+            <result property="useridId" column="userid_id" jdbcType="BIGINT"/>
+            <result property="description" column="description" jdbcType="VARCHAR"/>
+            <result property="techqaAmount" column="techqa_amount" jdbcType="INTEGER"/>
+            <result property="followerAmount" column="follower_amount" jdbcType="INTEGER"/>
+            <result property="gmtCreate" column="gmt_create" jdbcType="TIMESTAMP"/>
+            <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
+            <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
+            <result property="modifiedBy" column="modified_by" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        topic_id,user_id,description,
+        techqa_amount,follower_amount,gmt_create,is_deleted
+        create_by,gmt_modified,modified_by
+    </sql>
+
+
+    <!--分页查询标签信息-->
+    <!--按照是否置顶和创建时间排序-->
+    <select id = "getTopics" resultType="com.easyse.easyse_simple.pojo.DO.techqa.Topic">
+        select <include refid="Base_Column_List"></include>
+        from share_topic
+        where is_deleted != 1
+        <if test = "orderMode == 0">
+            order by gmt_create desc
+        </if>
+        <if test = "orderMode == 1">
+            order by techqa_amount desc, gmt_create desc
+        </if>
+        limit #{offset}, #{limit}
+    </select>
+
+    <select id="getTopicRows" resultType="Integer">
+        select count(*) from share_topic where is_deleted != 1
+    </select>
+</mapper>

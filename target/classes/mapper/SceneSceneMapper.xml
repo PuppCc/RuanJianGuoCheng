@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easyse.easyse_simple.mapper.exampleservice.SceneSceneMapper">
+
+    <resultMap id="BaseResultMap" type="com.easyse.easyse_simple.pojo.DO.example.SceneScene">
+            <id property="sceneDesignId" column="scene_design_id" jdbcType="BIGINT"/>
+            <id property="sceneId" column="scene_id" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        scene_design_id,scene_id
+    </sql>
+</mapper>

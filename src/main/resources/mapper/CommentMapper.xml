@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easyse.easyse_simple.mapper.techqaservice.CommentMapper">
+
+    <resultMap id="BaseResultMap" type="com.easyse.easyse_simple.pojo.DO.techqa.Comment">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="userId" column="user_id" jdbcType="INTEGER"/>
+            <result property="entityType" column="entity_type" jdbcType="INTEGER"/>
+            <result property="entityId" column="entity_id" jdbcType="INTEGER"/>
+            <result property="targetId" column="target_id" jdbcType="INTEGER"/>
+            <result property="content" column="content" jdbcType="VARCHAR"/>
+            <result property="isDeleted" column="is_deleted" jdbcType="TINYINT"/>
+            <result property="likeCount" column="like_count" jdbcType="INTEGER"/>
+            <result property="gmtCreate" column="gmt_create" jdbcType="TIMESTAMP"/>
+            <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
+            <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
+            <result property="updateBy" column="update_by" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,user_id,entity_type,
+        entity_id,target_id,content,
+        is_deleted,gmt_create,create_by,
+        gmt_modified,update_by
+    </sql>
+
+    <sql id = "selectFields">
+        id, user_id, entity_type, entity_id, target_id, content, is_deleted, gmt_create
+    </sql>
+
+    <!--查询评论的个数-->
+    <!--分页查询评论-->
+    <!--不查询禁用的评论, 按照创建时间升序排序-->
+    <select id = "selectCommentByEntity" resultType="com.easyse.easyse_simple.pojo.DO.techqa.Comment">
+        select <include refid="selectFields"></include>
+        from share_comment
+        where is_deleted = 0
+        and entity_type = #{entityType}
+        and entity_id = #{entityId}
+        order by gmt_create asc
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--查询评论的个数-->
+    <select id = "selectCountByEntity" resultType="int">
+        select count(id)
+        from share_comment
+        where is_deleted = 0
+          and entity_type = #{entityType}
+          and entity_id = #{entityId}
+    </select>
+
+    <!--分页查询某个用户的评论/回复列表-->
+    <select id = "selectCommentByUserId" resultType="com.easyse.easyse_simple.pojo.DO.techqa.Comment">
+        select <include refid="selectFields"></include>
+        from share_comment
+        where is_deleted = 0
+        and user_id = #{userId}
+        order by gmt_create desc
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--查询某个用户的评论/回复数量-->
+    <select id = "selectCommentCountByUserId" resultType="int">
+        select count(id)
+        from share_comment
+        where is_deleted = 0
+          and user_id = #{userId}
+    </select>
+
+    <!--更新帖子的评论数量-->
+    <update id="updateCommentCount">
+        update share_techqa
+        set comment_count = #{commentCount}
+        where id = #{id}
+    </update>
+
+    <update id="deleteByIdInt">
+        update share_comment
+        set is_deleted = 1
+        where id = #{id}
+    </update>
+
+    <select id = "findCommentRows" resultType="int">
+        select count(id)
+        from share_comment
+        where is_deleted = 0
+    </select>
+
+    <!--分页查询标签信息-->
+    <!--按照是否置顶和创建时间排序-->
+    <select id = "findComments" resultType="com.easyse.easyse_simple.pojo.DO.techqa.Comment">
+        select <include refid="Base_Column_List"></include>
+        from share_comment
+        where is_deleted != 1
+        <if test = "orderMode == 0">
+            order by gmt_create desc
+        </if>
+        <if test = "orderMode == 1">
+            order by like_count desc, gmt_create desc
+        </if>
+        limit #{offset}, #{limit}
+    </select>
+
+
+</mapper>
